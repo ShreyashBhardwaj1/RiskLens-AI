@@ -1,0 +1,30 @@
+# Core data science
+numpy
+pandas
+scikit-learn
+
+# Visualization
+matplotlib
+seaborn
+
+# ML models
+xgboost
+
+# Model explainability
+shap
+
+# Model saving/loading
+joblib
+
+# API deployment
+fastapi
+uvicorn
+
+# Data validation
+pydantic
+
+# Notebook (optional)
+jupyter
+
+# Environment management
+python-dotenv
