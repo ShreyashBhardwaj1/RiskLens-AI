@@ -217,15 +217,17 @@ ENV/
 conda-meta/
 .env
 
-# Data
+# Data (ignore raw datasets, keep folder)
 data/*
 !data/.gitkeep
 
-# Models
+# Models (KEEP trained model for deployment)
+# Ignore temp models, but keep final production model
 models/*
 !models/.gitkeep
+!models/credit_risk_model.json
 
-# ML artifacts
+# ML artifacts (ignore experimental artifacts only)
 *.pkl
 *.joblib
 *.h5
