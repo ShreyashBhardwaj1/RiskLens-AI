@@ -1,42 +1,72 @@
 import pandas as pd
 import xgboost as xgb
+import os
 
 
-MODEL_PATH = "models/credit_risk_model.json"
+# Get absolute base directory (works locally AND on Render)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MODEL_PATH = os.path.join(BASE_DIR, "models", "credit_risk_model.json")
 
 
 class RiskPredictor:
 
     def __init__(self):
 
-        # Load model using native XGBoost method
+        # Verify model exists
+        if not os.path.exists(MODEL_PATH):
+            raise FileNotFoundError(f"Model file not found at: {MODEL_PATH}")
+
+        # Load model
         self.model = xgb.XGBClassifier()
         self.model.load_model(MODEL_PATH)
 
-        print("Model loaded successfully")
+        # Save feature names safely
+        booster = self.model.get_booster()
+
+        if booster.feature_names is None:
+            raise ValueError(
+                "Model has no feature names. Retrain model with feature names."
+            )
+
+        self.model_features = booster.feature_names
+
+        print(f"Model loaded successfully from: {MODEL_PATH}")
+        print(f"Total features expected: {len(self.model_features)}")
+
 
     def predict(self, input_data: dict):
 
-        # Convert input to DataFrame
-        df = pd.DataFrame([input_data])
+        try:
 
-        # Convert categorical variables
-        df = pd.get_dummies(df)
+            # Convert input to DataFrame
+            df = pd.DataFrame([input_data])
 
-        # Align with model features
-        model_features = self.model.get_booster().feature_names
-        df = df.reindex(columns=model_features, fill_value=0)
+            # Apply same preprocessing
+            df = pd.get_dummies(df)
 
-        # Predict
-        prediction = self.model.predict(df)[0]
-        probability = self.model.predict_proba(df)[0][1]
+            # Align with training features
+            df = df.reindex(columns=self.model_features, fill_value=0)
 
-        return {
-            "prediction": int(prediction),
-            "default_probability": float(probability)
-        }
+            # Predict
+            prediction = self.model.predict(df)[0]
+            probability = self.model.predict_proba(df)[0][1]
+
+            return {
+                "prediction": int(prediction),
+                "default_probability": float(probability)
+            }
+
+        except Exception as e:
+
+            return {
+                "error": str(e),
+                "prediction": None,
+                "default_probability": None
+            }
 
 
+# Test locally
 if __name__ == "__main__":
 
     predictor = RiskPredictor()
