@@ -1,30 +1,16 @@
-# Core data science
-numpy
-pandas
-scikit-learn
+# Core ML and Data Science
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.1
+xgboost==2.1.1
 
-# Visualization
-matplotlib
-seaborn
+# Model persistence
+joblib==1.4.2
 
-# ML models
-xgboost
+# API framework
+fastapi==0.115.0
+uvicorn==0.30.6
+pydantic==2.8.2
 
-# Model explainability
-shap
-
-# Model saving/loading
-joblib
-
-# API deployment
-fastapi
-uvicorn
-
-# Data validation
-pydantic
-
-# Notebook (optional)
-jupyter
-
-# Environment management
-python-dotenv
+# Environment variables
+python-dotenv==1.0.1
