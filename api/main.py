@@ -9,11 +9,22 @@ sys.path.append(os.path.abspath("src"))
 from predict import RiskPredictor
 
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # This line is CRITICAL — do not rename 'app'
 app = FastAPI(
     title="RiskLens-AI API",
     description="Credit Risk Prediction API",
     version="1.0"
+)
+
+# Enable CORS for local development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify the actual domain
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Load model once

@@ -84,3 +84,4 @@ Example output:
   "prediction": 1,
   "default_probability": 0.9983
 }
+```
